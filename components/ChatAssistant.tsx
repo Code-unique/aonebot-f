@@ -959,7 +959,7 @@ export default function ChatAssistant() {
         ref={chatRef}
         aria-live="polite"
         style={{
-          background: "linear-gradient(135deg, #f0f4ff, #ffffff)",
+          background: "linear-gradient(135deg, #f8f9ff, #ffffff)",
         }}
       >
         <AnimatePresence>
@@ -969,7 +969,9 @@ export default function ChatAssistant() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className={`aone-message ${msg.isBot ? "bot" : "user"} ${msg.loading ? "loading" : ""}`}
+              
             >
+              
               {msg.isBot && !msg.loading && (
                 <div
                   style={{
@@ -1011,7 +1013,7 @@ export default function ChatAssistant() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => handleOptionClick(option)}
-                            className="bg-white border border-gray-200 hover:border-[#012169] text-black-800 px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors"
+                            className="bg-white border border-gray-200 hover:border-[#012169] text-gray-800 px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors"
                           >
                             {option.icon}
                             {option.text}
@@ -1161,6 +1163,7 @@ export default function ChatAssistant() {
                       padding: "0.75rem 1rem 0.75rem 2.5rem",
                       borderRadius: "8px",
                       border: "1px solid #ddd",
+                      color:"#1A1A1A",
                       fontSize: "1rem",
                       transition: "border-color 0.2s, box-shadow 0.2s",
                       outline: "none",
@@ -1189,7 +1192,7 @@ export default function ChatAssistant() {
                       left: "1rem",
                       top: "50%",
                       transform: "translateY(-50%)",
-                      color: "#666",
+                      color: "#1A1A1A",
                     }}
                   />
                   <input
@@ -1233,7 +1236,7 @@ export default function ChatAssistant() {
                       left: "1rem",
                       top: "50%",
                       transform: "translateY(-50%)",
-                      color: "#666",
+                      color: "#1A1A1A",
                     }}
                   />
                   <input
@@ -1277,7 +1280,7 @@ export default function ChatAssistant() {
                       left: "1rem",
                       top: "50%",
                       transform: "translateY(-50%)",
-                      color: "#666",
+                      color: "#1A1A1A",
                     }}
                   />
                   <input

@@ -11,8 +11,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     <NextThemesProvider
       attribute="class"
       defaultTheme="light"
-      enableSystem={false} // prevents switching to dark mode
-      forcedTheme="light"  // forces light mode
+      enableSystem={false}
+      forcedTheme="light"
     >
       {children}
     </NextThemesProvider>

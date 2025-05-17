@@ -14,6 +14,7 @@ interface AppointmentsContextType {
   appointments: AppointmentWithStaff[]
   addAppointment: (appointment: AppointmentWithStaff) => Promise<void>
   removeAppointment: (id: string) => Promise<void>
+  updateAppointment: (id: string, newDate: Date) => Promise<void>
   loading: boolean
   error: string | null
 }
@@ -36,7 +37,7 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
       setError(null)
 
       try {
-        // First, get the user record from Supabase
+        // Get user record from Supabase
         const { data: userData, error: userError } = await supabase
           .from("users")
           .select("id")
@@ -44,12 +45,11 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
           .single()
 
         if (userError || !userData) {
-          console.log("User not found in database, skipping appointment fetch")
           setLoading(false)
           return
         }
 
-        // Then fetch appointments for this user
+        // Fetch appointments for this user, exclude cancelled by default
         const { data, error: appointmentsError } = await supabase
           .from("appointments")
           .select(`
@@ -61,6 +61,7 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
             staff:staff_id (name, role)
           `)
           .eq("user_id", userData.id)
+          .neq("status", "cancelled")
           .order("date", { ascending: true })
 
         if (appointmentsError) {
@@ -68,12 +69,11 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
         }
 
         if (data) {
-          // Transform the data to match our expected format
           const formattedAppointments = data.map((apt) => ({
             id: apt.id,
             staff_id: apt.staff_id,
             date: new Date(apt.date),
-            status: apt.status,
+            status: apt.status || "booked",
             notes: apt.notes,
             staffName: apt.staff?.name || "Unknown",
             staffRole: apt.staff?.role || "Staff Member",
@@ -93,6 +93,7 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     fetchAppointments()
   }, [isSignedIn, user, supabase])
 
+  // Add a new appointment (booking)
   const addAppointment = async (appointment: AppointmentWithStaff) => {
     setLoading(true)
     setError(null)
@@ -102,7 +103,7 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
         throw new Error("User not authenticated")
       }
 
-      // First, ensure the user exists in our database
+      // Ensure user exists in Supabase users table
       const { data: userData, error: userError } = await supabase
         .from("users")
         .select("id")
@@ -111,7 +112,6 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
 
       let userId = userData?.id
 
-      // If user doesn't exist, create them
       if (userError || !userData) {
         const { data: newUser, error: createError } = await supabase
           .from("users")
@@ -130,13 +130,14 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
         userId = newUser.id
       }
 
-      // Now create the appointment
+      // Create the appointment
       const { data, error: appointmentError } = await supabase
         .from("appointments")
         .insert({
           user_id: userId,
           staff_id: appointment.staff_id,
           date: appointment.date,
+          status: "booked",
           notes: appointment.notes || `Appointment with ${appointment.staffName}`,
         })
         .select("id, date, status, staff_id")
@@ -146,7 +147,6 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
         throw appointmentError || new Error("Failed to create appointment")
       }
 
-      // Add the new appointment to state
       const newAppointment: AppointmentWithStaff = {
         ...data,
         date: new Date(data.date),
@@ -165,20 +165,26 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Soft cancel appointment (update status)
   const removeAppointment = async (id: string) => {
     setLoading(true)
     setError(null)
 
     try {
-      const { error } = await supabase.from("appointments").delete().eq("id", id)
+      const { error } = await supabase
+        .from("appointments")
+        .update({ status: "cancelled", updated_at: new Date() })
+        .eq("id", id)
 
       if (error) {
         throw error
       }
 
-      setAppointments((prev) => prev.filter((apt) => apt.id !== id))
+      setAppointments((prev) =>
+        prev.map((apt) => (apt.id === id ? { ...apt, status: "cancelled" } : apt))
+      )
     } catch (err) {
-      console.error("Error removing appointment:", err)
+      console.error("Error cancelling appointment:", err)
       setError("Failed to cancel appointment")
       throw err
     } finally {
@@ -186,8 +192,46 @@ export function AppointmentsProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Reschedule appointment (update date and status)
+  const updateAppointment = async (id: string, newDate: Date) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const { error } = await supabase
+        .from("appointments")
+        .update({ date: newDate, status: "rescheduled", updated_at: new Date() })
+        .eq("id", id)
+
+      if (error) {
+        throw error
+      }
+
+      setAppointments((prev) =>
+        prev.map((apt) =>
+          apt.id === id
+            ? {
+                ...apt,
+                date: newDate,
+                status: "rescheduled",
+                time: newDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+              }
+            : apt
+        )
+      )
+    } catch (err) {
+      console.error("Error rescheduling appointment:", err)
+      setError("Failed to reschedule appointment")
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <AppointmentsContext.Provider value={{ appointments, addAppointment, removeAppointment, loading, error }}>
+    <AppointmentsContext.Provider
+      value={{ appointments, addAppointment, removeAppointment, updateAppointment, loading, error }}
+    >
       {children}
     </AppointmentsContext.Provider>
   )

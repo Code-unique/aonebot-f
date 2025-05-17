@@ -890,9 +890,6 @@ export default function ChatAssistant() {
         }}
       >
         <div className="header-brand">
-          <FiHome className="aone-icon" />
-          <h1 className="text-xl font-bold">A One Real Estate Assistant</h1>
-          <div className="online-indicator" />
         </div>
       </motion.header>
 
@@ -1014,7 +1011,7 @@ export default function ChatAssistant() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => handleOptionClick(option)}
-                            className="bg-white border border-gray-200 hover:border-[#012169] text-gray-800 px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors"
+                            className="bg-white border border-gray-200 hover:border-[#012169] text-black-800 px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors"
                           >
                             {option.icon}
                             {option.text}

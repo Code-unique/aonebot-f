@@ -275,13 +275,13 @@ export default function AppointmentCalendar({
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-12">
                   <FiLoader className="w-8 h-8 animate-spin text-[#012169] mb-4" />
-                  <p className="text-gray-500">Loading...</p>
+                  <p className="text-black-500">Loading...</p>
                 </div>
               ) : error ? (
                 <div className="text-center py-8 text-red-500">
                   <FiAlertCircle className="w-12 h-12 mx-auto mb-4" />
                   <p>{error}</p>
-                  <button className="mt-4 px-4 py-2 bg-[#012169] text-white rounded-lg" onClick={() => setError(null)}>
+                  <button className="mt-4 px-4 py-2 bg-[#012169] text-black rounded-lg" onClick={() => setError(null)}>
                     Try Again
                   </button>
                 </div>
@@ -289,7 +289,7 @@ export default function AppointmentCalendar({
                 <div className="text-center py-8">
                   <FiAlertCircle className="w-12 h-12 mx-auto mb-4 text-amber-500" />
                   <h3 className="text-xl font-bold mb-2">Sign In Required</h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-black-600 mb-4">
                     You need to sign in to book an appointment. This helps us keep track of your bookings.
                   </p>
                   <button
@@ -297,7 +297,7 @@ export default function AppointmentCalendar({
                       onClose()
                       // The user will need to sign in and then come back to book
                     }}
-                    className="px-4 py-2 bg-[#012169] text-white rounded-lg"
+                    className="px-4 py-2 bg-[#012169] text-black rounded-lg"
                   >
                     Sign In to Continue
                   </button>
@@ -308,12 +308,12 @@ export default function AppointmentCalendar({
                     <FiCheck className="text-green-600" size={32} />
                   </div>
                   <h3 className="text-xl font-bold mb-2">Appointment Confirmed!</h3>
-                  <p className="text-gray-600 mb-4">
+                  <p className="text-black-600 mb-4">
                     Your appointment has been scheduled for{" "}
                     {selectedDate?.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })} at{" "}
                     {selectedTime}.
                   </p>
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mb-4">
+                  <div className="flex items-center justify-center gap-2 text-sm text-black-500 mb-4">
                     <FiBell className="text-blue-500" />
                     <span>We'll send you a reminder 24 hours before your appointment</span>
                   </div>
@@ -388,7 +388,7 @@ export default function AppointmentCalendar({
 
                         <div className="grid grid-cols-7 gap-1 mb-4">
                           {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                            <div key={day} className="text-center text-sm font-medium text-gray-500">
+                            <div key={day} className="text-center text-sm font-medium text-black-500">
                               {day}
                             </div>
                           ))}
@@ -410,7 +410,7 @@ export default function AppointmentCalendar({
                           ))}
                         </div>
 
-                        <div className="text-center text-sm text-gray-500 mb-4">
+                        <div className="text-center text-sm text-black-500 mb-4">
                           Please select a date for your appointment.
                         </div>
                       </motion.div>
@@ -427,7 +427,7 @@ export default function AppointmentCalendar({
                       >
                         <div className="mb-4">
                           <h3 className="text-lg font-medium mb-2">Select a Time</h3>
-                          <p className="text-sm text-gray-600 mb-4">
+                          <p className="text-sm text-black-600 mb-4">
                             {selectedDate?.toLocaleDateString("en-US", {
                               weekday: "long",
                               month: "long",
@@ -442,7 +442,7 @@ export default function AppointmentCalendar({
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 className={`p-2 border rounded-lg text-center hover:border-[#012169] transition-colors ${
-                                  selectedTime === time ? "bg-[#012169] text-white" : ""
+                                  selectedTime === time ? "bg-[#012169] text-black" : ""
                                 }`}
                                 onClick={() => handleTimeSelect(time)}
                               >
@@ -496,7 +496,7 @@ export default function AppointmentCalendar({
                               </div>
                               <div>
                                 <div className="font-medium">{staff.name}</div>
-                                <div className="text-sm text-gray-600">{staff.role}</div>
+                                <div className="text-sm text-black-600">{staff.role}</div>
                               </div>
                             </motion.button>
                           ))}
@@ -526,10 +526,10 @@ export default function AppointmentCalendar({
 
                         <div className="bg-gray-50 p-4 rounded-lg mb-4">
                           <div className="flex items-start mb-3">
-                            <FiCalendar className="text-gray-500 mt-1 mr-3" />
+                            <FiCalendar className="text-black-500 mt-1 mr-3" />
                             <div>
                               <div className="font-medium">Date & Time</div>
-                              <div className="text-gray-600">
+                              <div className="text-black-600">
                                 {selectedDate?.toLocaleDateString("en-US", {
                                   weekday: "long",
                                   month: "long",
@@ -541,10 +541,10 @@ export default function AppointmentCalendar({
                           </div>
 
                           <div className="flex items-start">
-                            <FiClock className="text-gray-500 mt-1 mr-3" />
+                            <FiClock className="text-black-500 mt-1 mr-3" />
                             <div>
                               <div className="font-medium">Specialist</div>
-                              <div className="text-gray-600">
+                              <div className="text-black-600">
                                 {staffMembers.find((staff) => staff.id === selectedStaffId)?.name ||
                                   "Any available staff"}
                                 {" - "}
@@ -570,7 +570,7 @@ export default function AppointmentCalendar({
                             onClick={handleConfirm}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className={`px-4 py-2 bg-[#012169] text-white rounded-lg hover:bg-[#1a3a7e] transition-colors ${
+                            className={`px-4 py-2 bg-[#012169] text-black rounded-lg hover:bg-[#1a3a7e] transition-colors ${
                               isSubmitting ? "opacity-70 cursor-not-allowed" : ""
                             }`}
                             disabled={isSubmitting}

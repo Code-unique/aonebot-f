@@ -40,7 +40,7 @@ export default function AppointmentsPage() {
   }, [isLoaded, isSignedIn, router])
 
   return (
-    <div className="min-h-screen bg-[#012169] text-white">
+    <div className="min-h-screen bg-white text-gray-900">
       {/* Header */}
       <header className="w-full bg-[#012169] border-b border-white/10 py-4 shadow-md">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
@@ -90,24 +90,24 @@ export default function AppointmentsPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-white">My Appointments</h1>
+        <h1 className="text-3xl font-bold mb-6 text-gray-900">My Appointments</h1>
 
         <div className="flex items-center justify-between mb-6">
           <div>
-            {loading && <p className="text-white/80">Loading appointments...</p>}
-            {error && <p className="text-red-400">{error}</p>}
+            {loading && <p className="text-gray-600">Loading appointments...</p>}
+            {error && <p className="text-red-500">{error}</p>}
           </div>
           <button
             onClick={() => setCalendarOpen(true)}
-            className="px-6 py-3 bg-[#002366] text-white rounded-lg hover:bg-[#001a4d] transition-colors shadow-md"
+            className="px-6 py-3 bg-[#012169] text-white rounded-lg hover:bg-[#001a4d] transition-colors shadow-md"
           >
             Book New Appointment
           </button>
         </div>
 
         {appointments.length === 0 && !loading && (
-          <div className="text-center p-8 bg-white/10 rounded-lg">
-            <p className="text-white">No upcoming appointments found</p>
+          <div className="text-center p-8 bg-gray-100 rounded-lg">
+            <p className="text-gray-600">No upcoming appointments found</p>
           </div>
         )}
 
@@ -117,28 +117,28 @@ export default function AppointmentsPage() {
               key={apt.id}
               className={`border p-4 rounded-lg shadow-sm flex justify-between items-center
                 ${apt.status === "cancelled"
-                  ? "bg-red-100/20 border-red-300"
-                  : "bg-white/10 border-white/10"}`}
+                  ? "bg-red-50 border-red-200"
+                  : "bg-white border-gray-200"}`}
             >
               <div className="space-y-2">
-                <p className="text-lg font-semibold text-white">
+                <p className="text-lg font-semibold text-gray-900">
                   {new Date(apt.date).toLocaleDateString(undefined, {
                     weekday: 'short',
                     month: 'short',
                     day: 'numeric',
                   })}
-                  <span className="ml-2 font-normal text-white/70">{apt.time}</span>
+                  <span className="ml-2 font-normal text-gray-600">{apt.time}</span>
                 </p>
                 <div className="flex items-center space-x-2">
-                  <span className="bg-white/10 text-white px-2 py-1 rounded text-sm">
+                  <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
                     {apt.staffName} ({apt.staffRole})
                   </span>
                   <span className={`px-2 py-1 rounded text-sm font-medium ${
                     apt.status === "booked"
-                      ? "bg-green-200 text-green-800"
+                      ? "bg-green-100 text-green-800"
                       : apt.status === "rescheduled"
-                      ? "bg-yellow-200 text-yellow-800"
-                      : "bg-red-200 text-red-800"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
                   }`}>
                     {apt.status}
                   </span>
@@ -150,14 +150,14 @@ export default function AppointmentsPage() {
                     <button
                       title="Reschedule"
                       onClick={() => openReschedule(apt.id!)}
-                      className="text-white hover:text-white/80 p-2 hover:bg-white/10 rounded-full"
+                      className="text-gray-700 hover:text-gray-900 p-2 hover:bg-gray-100 rounded-full"
                     >
                       <FiEdit size={20} />
                     </button>
                     <button
                       title="Cancel Appointment"
                       onClick={() => removeAppointment(apt.id!)}
-                      className="text-red-500 hover:text-red-600 p-2 hover:bg-red-100/20 rounded-full"
+                      className="text-red-600 hover:text-red-800 p-2 hover:bg-red-50 rounded-full"
                     >
                       <FiTrash2 size={20} />
                     </button>
